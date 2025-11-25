@@ -1,0 +1,87 @@
+<!-- Modern Clean Navigation Bar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center gap-2 hover:opacity-80 transition">
+        <img src="assets/images/logo.jpg" alt="Pokazuha Logo" class="h-10 w-auto">
+        <span class="font-bold text-xl text-gray-800 hidden sm:inline">pokazuha</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-6">
+        <a routerLink="/" class="text-gray-700 hover:text-poka-green font-medium transition">
+          Browse
+        </a>
+        <a routerLink="/post" class="bg-poka-orange hover:bg-poka-pink text-white px-5 py-2 rounded-lg font-medium transition">
+          Post Ad
+        </a>
+
+        <div *ngIf="!isAuthenticated" class="flex items-center gap-3">
+          <a routerLink="/auth/login" class="text-gray-700 hover:text-poka-green font-medium transition">
+            Log In
+          </a>
+          <a routerLink="/auth/register" class="border-2 border-poka-green text-poka-green hover:bg-poka-green hover:text-white px-4 py-2 rounded-lg font-medium transition">
+            Sign Up
+          </a>
+        </div>
+
+        <div *ngIf="isAuthenticated" class="flex items-center gap-3">
+          <div class="flex items-center gap-2 text-gray-700">
+            <div class="w-8 h-8 bg-poka-green text-white rounded-full flex items-center justify-center font-bold">
+              {{ userName.charAt(0).toUpperCase() }}
+            </div>
+            <span class="font-medium">{{ userName }}</span>
+          </div>
+          <button (click)="logout()" class="text-gray-500 hover:text-red-600 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button (click)="toggleMobileMenu()" class="md:hidden text-gray-700 hover:text-poka-green transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path *ngIf="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          <path *ngIf="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="mobileMenuOpen" class="md:hidden border-t border-gray-200 py-4">
+      <div class="flex flex-col gap-3">
+        <a routerLink="/" (click)="toggleMobileMenu()" class="text-gray-700 hover:text-poka-green font-medium py-2">
+          Browse Listings
+        </a>
+        <a routerLink="/post" (click)="toggleMobileMenu()" class="text-gray-700 hover:text-poka-orange font-medium py-2">
+          Post Ad
+        </a>
+
+        <div *ngIf="!isAuthenticated" class="flex flex-col gap-2 pt-2 border-t border-gray-200">
+          <a routerLink="/auth/login" (click)="toggleMobileMenu()" class="text-gray-700 hover:text-poka-green font-medium py-2">
+            Log In
+          </a>
+          <a routerLink="/auth/register" (click)="toggleMobileMenu()" class="bg-poka-green text-white text-center px-4 py-2 rounded-lg font-medium">
+            Sign Up
+          </a>
+        </div>
+
+        <div *ngIf="isAuthenticated" class="flex flex-col gap-2 pt-2 border-t border-gray-200">
+          <div class="flex items-center gap-2 text-gray-700 py-2">
+            <div class="w-8 h-8 bg-poka-green text-white rounded-full flex items-center justify-center font-bold">
+              {{ userName.charAt(0).toUpperCase() }}
+            </div>
+            <span class="font-medium">{{ userName }}</span>
+          </div>
+          <button (click)="logout(); toggleMobileMenu()" class="text-red-600 hover:text-red-700 font-medium py-2 text-left">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

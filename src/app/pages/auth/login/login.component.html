@@ -1,0 +1,126 @@
+<div class="min-h-screen bg-white flex items-center justify-center py-12 px-4">
+
+  <div class="max-w-md w-full">
+
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <a routerLink="/" class="inline-block">
+        <h2 class="text-2xl font-bold text-poka-green">
+          pokazuha
+        </h2>
+      </a>
+      <p class="text-gray-600 mt-2 text-sm">
+        log in to your account
+      </p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="border border-gray-300 p-6">
+      
+      <!-- Error Message -->
+      <div *ngIf="errorMessage"
+           class="mb-4 bg-red-50 border border-red-300 text-red-700 px-3 py-2 text-sm">
+        {{ errorMessage }}
+      </div>
+
+    <!-- Google Login Button -->
+    <div id="google-signin-btn" class="mb-4 flex justify-center"></div>
+
+      <!-- Divider -->
+      <div class="relative my-4">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-xs">
+          <span class="px-2 bg-white text-gray-500">or</span>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="block text-xs font-bold text-gray-700 mb-1">
+            email
+          </label>
+          <input type="email"
+                 formControlName="email"
+                 placeholder="your@email.com"
+                 [class.border-red-500]="email?.invalid && email?.touched"
+                 class="w-full px-2 py-1 border border-gray-400 text-sm">
+          <div *ngIf="email?.invalid && email?.touched"
+               class="text-red-600 text-xs mt-1">
+            <span *ngIf="email?.errors?.['required']">email is required</span>
+            <span *ngIf="email?.errors?.['email']">invalid email</span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="block text-xs font-bold text-gray-700 mb-1">
+            password
+          </label>
+          <div class="relative">
+            <input [type]="showPassword ? 'text' : 'password'"
+                   formControlName="password"
+                   placeholder="password"
+                   [class.border-red-500]="password?.invalid && password?.touched"
+                   class="w-full px-2 py-1 pr-8 border border-gray-400 text-sm">
+            <button type="button"
+                    (click)="togglePasswordVisibility()"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">
+              {{ showPassword ? 'hide' : 'show' }}
+            </button>
+          </div>
+          <div *ngIf="password?.invalid && password?.touched"
+               class="text-red-600 text-xs mt-1">
+            <span *ngIf="password?.errors?.['required']">password is required</span>
+            <span *ngIf="password?.errors?.['minlength']">minimum 8 characters</span>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between mb-4 text-xs">
+          <label class="flex items-center gap-1 cursor-pointer">
+            <input type="checkbox"
+                   formControlName="rememberMe">
+            <span class="text-gray-600">remember me</span>
+          </label>
+          <a routerLink="/auth/forgot-password"
+             class="text-poka-green hover:underline">
+            forgot password?
+          </a>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+                [disabled]="loginForm.invalid || isLoading"
+                class="w-full bg-poka-green hover:bg-poka-lime disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-2 text-sm font-bold">
+          <span *ngIf="!isLoading">log in</span>
+          <span *ngIf="isLoading">logging in...</span>
+        </button>
+
+      </form>
+
+      <!-- Sign Up Link -->
+      <div class="mt-4 text-center text-xs border-t border-gray-300 pt-4">
+        <span class="text-gray-600">don't have an account?</span>
+        <a routerLink="/auth/register"
+           class="text-poka-green hover:underline ml-1">
+          sign up
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Back to Home -->
+    <div class="text-center mt-4">
+      <a routerLink="/"
+         class="text-poka-green hover:underline text-xs">
+        ← back to home
+      </a>
+    </div>
+
+  </div>
+</div>
