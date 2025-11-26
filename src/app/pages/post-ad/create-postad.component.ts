@@ -39,7 +39,7 @@ export class CreatePostadComponent {
     'For Parts'
   ];
 
-  currencies = ['Lei', 'Euro', 'USD'];
+  currencies = ['USD', 'Euro', 'Lei'];
 
   constructor(
     private fb: FormBuilder,
@@ -50,7 +50,7 @@ export class CreatePostadComponent {
       title: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', [Validators.required, Validators.maxLength(5000)]],
       price: [0, [Validators.required, Validators.min(0)]],
-      currency: ['Lei', Validators.required],
+      currency: ['USD', Validators.required],
       category: ['', Validators.required],
       condition: ['', Validators.required],
       location: ['', [Validators.required, Validators.maxLength(200)]],

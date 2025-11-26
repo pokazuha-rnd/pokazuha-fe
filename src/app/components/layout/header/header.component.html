@@ -1,39 +1,39 @@
 <!-- Modern 2025 Header -->
 <header class="glass sticky top-0 z-50 border-b border-black/5">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="flex justify-between items-center h-[72px]">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+    <div class="flex justify-between items-center h-16 md:h-[72px]">
 
       <!-- Logo Only -->
       <a routerLink="/" class="flex items-center hover:opacity-90 transition">
-  <img src="assets/images/logo.jpg" alt="Pokazuha" class="h-16 w-auto rounded-xl shadow-md">
-</a>
+        <img src="assets/images/logo.jpg" alt="Pokazuha" class="h-10 md:h-16 w-auto rounded-xl shadow-md">
+      </a>
 
-      <!-- Search Bar - Centered -->
+      <!-- Search Bar - Centered (Desktop Only) -->
       <div class="flex-1 max-w-xl mx-8 hidden md:block">
-  <div class="flex items-center bg-poka-gray-100 rounded-2xl pl-4 pr-1 py-1 transition-all duration-300 focus-within:bg-white focus-within:shadow-lg focus-within:shadow-poka-cyan-500/10">
-    <svg class="w-5 h-5 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-    </svg>
-    <input 
-      type="text" 
-      [(ngModel)]="searchQuery"
-      (keyup)="onSearchKeyup($event)"
-      placeholder="Search for anything..."
-      class="flex-1 bg-transparent px-4 py-2.5 outline-none text-poka-gray-700 placeholder-poka-gray-400">
-    <button (click)="search()" class="btn-primary py-2.5 px-5 text-sm">
-      Search
-    </button>
-  </div>
-</div>
+        <div class="flex items-center bg-poka-gray-100 rounded-2xl pl-4 pr-1 py-1 transition-all duration-300 focus-within:bg-white focus-within:shadow-lg focus-within:shadow-poka-cyan-500/10">
+          <svg class="w-5 h-5 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery"
+            (keyup)="onSearchKeyup($event)"
+            placeholder="Search for anything..."
+            class="flex-1 bg-transparent px-4 py-2.5 outline-none text-poka-gray-700 placeholder-poka-gray-400">
+          <button (click)="search()" class="btn-primary py-2.5 px-5 text-sm">
+            Search
+          </button>
+        </div>
+      </div>
 
-      <!-- Right Actions -->
-      <div class="flex items-center gap-4">
+      <!-- Right Actions (Desktop Only) -->
+      <div class="hidden md:flex items-center gap-4">
         <!-- Post Ad Button -->
         <a routerLink="/post" class="btn-primary flex items-center gap-2 text-sm">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
-          <span class="hidden sm:inline">Post Ad</span>
+          <span>Post Ad</span>
         </a>
 
         <!-- User Section - Not Authenticated -->
@@ -52,7 +52,7 @@
             <div class="avatar text-sm">
               {{ userName.charAt(0).toUpperCase() }}
             </div>
-            <div class="hidden md:block">
+            <div>
               <p class="font-semibold text-sm text-poka-gray-800 group-hover:text-poka-cyan-600 transition">{{ userName }}</p>
               <p class="text-xs text-poka-gray-500">My Account</p>
             </div>
@@ -63,9 +63,24 @@
             </svg>
           </button>
         </div>
+      </div>
+
+      <!-- Mobile Actions -->
+      <div class="flex md:hidden items-center gap-2">
+        <!-- Post Ad Button (icon only on mobile) -->
+        <a routerLink="/post" class="btn-primary p-2.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+        </a>
+
+        <!-- User Avatar (mobile, if authenticated) -->
+        <div *ngIf="isAuthenticated" class="avatar text-sm w-9 h-9">
+          {{ userName.charAt(0).toUpperCase() }}
+        </div>
 
         <!-- Mobile Menu Button -->
-        <button (click)="toggleMobileMenu()" class="md:hidden p-2 text-poka-gray-600 hover:text-poka-cyan-600 transition">
+        <button (click)="toggleMobileMenu()" class="p-2 text-poka-gray-600 hover:text-poka-cyan-600 transition">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path *ngIf="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
             <path *ngIf="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -77,22 +92,22 @@
     <!-- Mobile Menu -->
     <div *ngIf="mobileMenuOpen" class="md:hidden border-t border-poka-gray-100 py-4 animate-fadeIn">
       <!-- Mobile Search -->
-     <div class="mb-4">
-  <div class="flex items-center bg-poka-gray-100 rounded-xl px-4 py-3">
-    <svg class="w-5 h-5 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-    </svg>
-    <input 
-      type="text" 
-      [(ngModel)]="searchQuery"
-      (keyup)="onSearchKeyup($event)"
-      placeholder="Search..." 
-      class="flex-1 bg-transparent px-3 outline-none text-poka-gray-700">
-    <button (click)="search()" class="text-poka-cyan-600 font-semibold text-sm">
-      Go
-    </button>
-  </div>
-</div>
+      <div class="mb-4">
+        <div class="flex items-center bg-poka-gray-100 rounded-xl px-4 py-3">
+          <svg class="w-5 h-5 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery"
+            (keyup)="onSearchKeyup($event)"
+            placeholder="Search..." 
+            class="flex-1 bg-transparent px-3 outline-none text-poka-gray-700">
+          <button (click)="search()" class="text-poka-cyan-600 font-semibold text-sm">
+            Go
+          </button>
+        </div>
+      </div>
 
       <div class="flex flex-col gap-2">
         <a routerLink="/" (click)="toggleMobileMenu()" class="px-4 py-3 text-poka-gray-700 hover:bg-poka-gray-100 rounded-xl font-medium transition">

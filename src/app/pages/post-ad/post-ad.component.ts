@@ -105,7 +105,7 @@ export class PostAdComponent implements OnInit {
       title: formValue.title,
       description: formValue.description,
       price: parseFloat(formValue.price),
-      currency: 'Lei',
+      currency: 'USD',
       category: this.mapCategoryToBackend(formValue.category),
       condition: formValue.condition,
       location: formValue.location,
