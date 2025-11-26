@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PostadService, PaginatedPostadsDto, PostadListDto } from '../../services/postad.service';
@@ -11,16 +11,16 @@ import { PostadService, PaginatedPostadsDto, PostadListDto } from '../../service
   styleUrl: './listing-list-view.component.css'
 })
 export class ListingListViewComponent implements OnInit {
+  @Input() viewMode: 'grid' | 'list' = 'grid';
+  
   postads: PostadListDto[] = [];
   currentPage = 1;
-  pageSize = 20;
+  pageSize = 12;
   totalPages = 0;
   totalCount = 0;
   loading = false;
+  loadingMore = false;
   error: string | null = null;
-  
-  // Expose Math to template
-  Math = Math;
 
   constructor(
     private postadService: PostadService,
@@ -31,9 +31,14 @@ export class ListingListViewComponent implements OnInit {
     this.loadPostads();
   }
 
+  get hasMorePages(): boolean {
+    return this.currentPage < this.totalPages;
+  }
+
   loadPostads(): void {
     this.loading = true;
     this.error = null;
+    this.currentPage = 1;
 
     this.postadService.getActivePostads(this.currentPage, this.pageSize)
       .subscribe({
@@ -48,42 +53,77 @@ export class ListingListViewComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error loading postads:', err);
-          this.error = 'Failed to load postads. Please try again.';
+          this.error = 'Failed to load listings. Please try again.';
           this.loading = false;
         }
       });
   }
 
-  onPageChange(page: number): void {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.loadPostads();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  loadMore(): void {
+    if (this.loadingMore || !this.hasMorePages) return;
+    
+    this.loadingMore = true;
+    const nextPage = this.currentPage + 1;
+
+    this.postadService.getActivePostads(nextPage, this.pageSize)
+      .subscribe({
+        next: (response: PaginatedPostadsDto) => {
+          this.postads = [...this.postads, ...response.postads];
+          this.currentPage = response.currentPage;
+          this.totalPages = response.totalPages;
+          this.totalCount = response.totalCount;
+          this.loadingMore = false;
+        },
+        error: (err) => {
+          console.error('Error loading more postads:', err);
+          this.loadingMore = false;
+        }
+      });
+  }
+
+  searchPostads(searchTerm?: string, category?: string, location?: string): void {
+    this.loading = true;
+    this.error = null;
+    this.currentPage = 1;
+
+    // If no filters, load all
+    if (!searchTerm && !category && !location) {
+      this.loadPostads();
+      return;
+    }
+
+    this.postadService.searchPostads(
+      searchTerm || undefined,
+      category || undefined,
+      location || undefined,
+      undefined,
+      undefined,
+      undefined,
+      this.currentPage,
+      this.pageSize
+    ).subscribe({
+      next: (response: PaginatedPostadsDto) => {
+        console.log('Search results:', response);
+        this.postads = response.postads;
+        this.currentPage = response.currentPage;
+        this.pageSize = response.pageSize;
+        this.totalPages = response.totalPages;
+        this.totalCount = response.totalCount;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error searching postads:', err);
+        this.error = 'Failed to search listings. Please try again.';
+        this.loading = false;
+      }
+    });
   }
 
   viewPostad(id: string): void {
-    this.router.navigate(['/listing-detail', id]);
+    this.router.navigate(['/listing', id]);
   }
 
   getImageUrl(imageUrl: string): string {
     return this.postadService.getImageUrl(imageUrl);
-  }
-
-  get pages(): number[] {
-    const maxPagesToShow = 5;
-    const pages: number[] = [];
-    
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
-    
-    if (endPage - startPage < maxPagesToShow - 1) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-    
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    
-    return pages;
   }
 }

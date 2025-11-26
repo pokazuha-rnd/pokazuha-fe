@@ -1,12 +1,12 @@
 <div>
 
   <!-- Loading State -->
-  <div *ngIf="loading" class="flex justify-center items-center py-12">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-poka-green"></div>
+  <div *ngIf="loading" class="flex justify-center items-center py-16">
+    <div class="w-12 h-12 border-4 border-poka-cyan-200 border-t-poka-cyan-500 rounded-full animate-spin"></div>
   </div>
 
   <!-- Error State -->
-  <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 mb-6 rounded-lg">
+  <div *ngIf="error" class="bg-poka-magenta-50 border-l-4 border-poka-magenta-500 text-poka-magenta-800 p-4 rounded-xl mb-6">
     <div class="flex items-center gap-3">
       <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
@@ -16,68 +16,70 @@
   </div>
 
   <!-- Grid View -->
-  <div *ngIf="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngIf="!loading && !error && viewMode === 'grid'" 
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <div *ngFor="let postad of postads"
          (click)="viewPostad(postad.id)"
-         class="bg-white rounded-xl shadow-md hover:shadow-xl transition cursor-pointer overflow-hidden group">
+         class="card card-hover cursor-pointer group">
+      
       <!-- Image -->
-      <div class="relative h-48 overflow-hidden bg-gray-100">
+      <div class="relative h-52 overflow-hidden bg-poka-gray-100">
         <img
-          [src]="postad.primaryImageUrl
-      ? getImageUrl(postad.primaryImageUrl)
-      : 'assets/no-image.jpg'"
+          [src]="postad.primaryImageUrl ? getImageUrl(postad.primaryImageUrl) : 'assets/images/placeholder.png'"
           [alt]="postad.title"
-          class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
         <!-- Status Badge -->
         <div class="absolute top-3 right-3">
-          <span class="px-3 py-1 rounded-full text-xs font-bold"
-                [ngClass]="{
-                  'bg-poka-green text-white': postad.status === 'Active',
-                  'bg-yellow-400 text-gray-800': postad.status === 'Pending',
-                  'bg-gray-400 text-white': postad.status === 'Expired'
-                }">
+          <span class="badge badge-active shadow-lg">
             {{ postad.status }}
           </span>
         </div>
+
+        <!-- Favorite Button -->
+        <button class="absolute top-3 left-3 w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-110">
+          <svg class="w-4 h-4 text-poka-gray-400 hover:text-poka-magenta-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Content -->
-      <div class="p-4">
+      <div class="p-5">
         <!-- Price -->
-        <div class="text-2xl font-bold text-poka-orange mb-2">
-          {{ postad.price }} {{ postad.currency }}
+        <div class="price text-2xl mb-2">
+          {{ postad.price | number }} {{ postad.currency }}
         </div>
 
         <!-- Title -->
-        <h3 class="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-poka-green transition">
+        <h3 class="font-semibold text-poka-gray-800 mb-2 line-clamp-2 group-hover:text-poka-cyan-600 transition">
           {{ postad.title }}
         </h3>
 
         <!-- Location & Category -->
-        <div class="flex items-center gap-2 text-sm text-gray-600 mb-3">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+        <div class="flex items-center gap-2 text-sm text-poka-gray-500 mb-3">
+          <svg class="w-4 h-4 text-poka-gray-400" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
           </svg>
           <span>{{ postad.location }}</span>
-          <span class="text-gray-400">•</span>
+          <span class="text-poka-gray-300">•</span>
           <span>{{ postad.category }}</span>
         </div>
 
         <!-- Condition -->
-        <div class="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-700 font-medium mb-3">
+        <span class="badge badge-condition">
           {{ postad.condition }}
-        </div>
+        </span>
 
         <!-- Footer -->
-        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-          <div class="flex items-center gap-2 text-xs text-gray-500">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-            </svg>
-            <span class="truncate">{{ postad.userName }}</span>
+        <div class="flex items-center justify-between mt-4 pt-4 border-t border-poka-gray-100">
+          <div class="flex items-center gap-2">
+            <div class="avatar w-7 h-7 text-xs">
+              {{ postad.userName.charAt(0) || 'U' }}
+            </div>
+            <span class="text-sm text-poka-gray-600 font-medium truncate max-w-[100px]">{{ postad.userName }}</span>
           </div>
-          <div class="flex items-center gap-1 text-xs text-gray-500">
+          <div class="flex items-center gap-1 text-xs text-poka-gray-400">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
               <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
@@ -89,58 +91,94 @@
     </div>
   </div>
 
-  <!-- Empty State -->
-  <div *ngIf="!loading && !error && postads.length === 0" class="text-center py-16">
-    <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
-    </svg>
-    <p class="text-gray-500 text-lg font-medium">No listings found</p>
-    <p class="text-gray-400 text-sm mt-2">Try adjusting your search criteria</p>
-  </div>
+  <!-- List View -->
+  <div *ngIf="!loading && !error && viewMode === 'list'" class="flex flex-col gap-4">
+    <div *ngFor="let postad of postads"
+         (click)="viewPostad(postad.id)"
+         class="card card-hover cursor-pointer group">
+      <div class="flex flex-col sm:flex-row">
+        
+        <!-- Image -->
+        <div class="relative w-full sm:w-52 h-48 sm:h-auto overflow-hidden bg-poka-gray-100 flex-shrink-0">
+          <img
+            [src]="postad.primaryImageUrl ? getImageUrl(postad.primaryImageUrl) : 'assets/images/placeholder.png'"
+            [alt]="postad.title"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
-  <!-- Pagination -->
-  <div *ngIf="totalPages > 1" class="mt-8">
-    <div class="flex justify-center items-center gap-2">
-      <!-- First & Previous -->
-      <button *ngIf="currentPage !== 1"
-              (click)="onPageChange(1)"
-              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
-        First
-      </button>
-      <button *ngIf="currentPage !== 1"
-              (click)="onPageChange(currentPage - 1)"
-              class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
-        ← Prev
-      </button>
+          <!-- Status Badge -->
+          <div class="absolute top-3 right-3">
+            <span class="badge badge-active shadow-lg">
+              {{ postad.status }}
+            </span>
+          </div>
 
-      <!-- Page Numbers -->
-      <div class="hidden sm:flex gap-2">
-        <button *ngFor="let page of pages"
-                (click)="onPageChange(page)"
-                [class.bg-poka-green]="page === currentPage"
-                [class.text-white]="page === currentPage"
-                [class.border-poka-green]="page === currentPage"
-                class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-          {{ page }}
-        </button>
+          <!-- Favorite Button -->
+          <button class="absolute top-3 left-3 w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <svg class="w-4 h-4 text-poka-gray-400 hover:text-poka-magenta-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 p-5">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+            <div class="flex-1">
+              <!-- Title -->
+              <h3 class="font-semibold text-lg text-poka-gray-800 mb-2 group-hover:text-poka-cyan-600 transition">
+                {{ postad.title }}
+              </h3>
+
+              <!-- Location & Category -->
+              <div class="flex items-center gap-2 text-sm text-poka-gray-500 mb-3">
+                <svg class="w-4 h-4 text-poka-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+                <span>{{ postad.location }}</span>
+                <span class="text-poka-gray-300">•</span>
+                <span>{{ postad.category }}</span>
+              </div>
+
+              <!-- Condition -->
+              <span class="badge badge-condition">
+                {{ postad.condition }}
+              </span>
+            </div>
+
+            <!-- Price -->
+            <div class="price text-2xl">
+              {{ postad.price | number }} {{ postad.currency }}
+            </div>
+          </div>
+
+        </div>
       </div>
-
-      <!-- Current page indicator for mobile -->
-      <span class="sm:hidden px-4 py-2 text-gray-700">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-
-      <!-- Next & Last -->
-      <button *ngIf="currentPage !== totalPages"
-              (click)="onPageChange(currentPage + 1)"
-              class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
-        Next →
-      </button>
-      <button *ngIf="currentPage !== totalPages"
-              (click)="onPageChange(totalPages)"
-              class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
-        Last
-      </button>
     </div>
   </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && postads.length === 0" class="text-center py-20">
+    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-poka-gray-100 flex items-center justify-center">
+      <svg class="w-10 h-10 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+      </svg>
+    </div>
+    <p class="text-poka-gray-600 text-lg font-semibold mb-2">No listings found</p>
+    <p class="text-poka-gray-400">Try adjusting your search criteria</p>
+  </div>
+
+  <!-- Load More Button -->
+  <div *ngIf="!loading && !error && postads.length > 0 && hasMorePages" class="text-center mt-12">
+    <button 
+      (click)="loadMore()"
+      [disabled]="loadingMore"
+      class="btn-secondary px-8 py-3.5 inline-flex items-center gap-2">
+      <span *ngIf="!loadingMore">Load More Listings</span>
+      <span *ngIf="loadingMore" class="flex items-center gap-2">
+        <div class="w-4 h-4 border-2 border-poka-gray-300 border-t-poka-cyan-500 rounded-full animate-spin"></div>
+        Loading...
+      </span>
+    </button>
+  </div>
+
 </div>

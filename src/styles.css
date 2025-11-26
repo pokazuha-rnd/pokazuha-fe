@@ -1,79 +1,193 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Import Plus Jakarta Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ===== BASE STYLES ===== */
 @layer base {
+  * {
+    @apply antialiased;
+  }
+  
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-    font-family: 'Inter', sans-serif;
+    @apply bg-poka-gray-50 text-poka-gray-900;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold;
+    @apply font-bold tracking-tight;
   }
 }
 
+/* ===== COMPONENT STYLES ===== */
 @layer components {
-  /* Primary Button */
+  
+  /* ----- BUTTONS ----- */
   .btn-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+    @apply bg-gradient-to-r from-poka-magenta-500 to-poka-magenta-700 
+           text-white font-semibold py-3 px-6 rounded-xl 
+           transition-all duration-300 ease-out
+           shadow-button hover:shadow-button-hover hover:-translate-y-0.5;
   }
 
-  /* Secondary Button */
   .btn-secondary {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2.5 px-6 rounded-lg transition-all duration-200;
+    @apply bg-white text-poka-gray-700 font-semibold py-3 px-6 rounded-xl 
+           border-2 border-poka-gray-200
+           transition-all duration-300 ease-out
+           hover:border-poka-cyan-500 hover:text-poka-cyan-600;
   }
 
-  /* Accent Button (roz) */
-  .btn-accent {
-    @apply bg-accent-500 hover:bg-accent-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+  .btn-cyan {
+    @apply bg-gradient-to-r from-poka-cyan-500 to-poka-cyan-700 
+           text-white font-semibold py-3 px-6 rounded-xl 
+           transition-all duration-300 ease-out
+           shadow-cyan hover:shadow-cyan-hover hover:-translate-y-0.5;
   }
 
-  /* Input Field */
-  .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  /* ----- INPUTS ----- */
+  .input {
+    @apply w-full px-4 py-3.5 
+           border-2 border-poka-gray-200 rounded-xl 
+           text-poka-gray-800 placeholder-poka-gray-400
+           transition-all duration-300 ease-out
+           focus:border-poka-cyan-500 focus:ring-4 focus:ring-poka-cyan-500/10 focus:outline-none;
   }
 
-  /* Card */
+  .input-search {
+    @apply bg-poka-gray-100 border-0 rounded-2xl px-5 py-4
+           transition-all duration-300 ease-out
+           focus:bg-white focus:shadow-lg focus:shadow-poka-cyan-500/10 focus:outline-none;
+  }
+
+  /* ----- CARDS ----- */
   .card {
-    @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-6;
+    @apply bg-white rounded-3xl border border-black/[0.04] overflow-hidden
+           transition-all duration-400 ease-out;
   }
 
-  /* Badge */
+  .card-hover {
+    @apply hover:-translate-y-1.5 hover:shadow-card-hover;
+  }
+
+  .card-sidebar {
+    @apply bg-white rounded-4xl border border-black/[0.03] shadow-card;
+  }
+
+  /* ----- GLASS EFFECT ----- */
+  .glass {
+    @apply bg-white/[0.97] backdrop-blur-xl;
+  }
+
+  /* ----- BADGES ----- */
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+    @apply inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold;
   }
 
-  .badge-primary {
-    @apply bg-primary-100 text-primary-700;
+  .badge-active {
+    @apply bg-gradient-to-r from-poka-cyan-500 to-poka-cyan-700 text-white;
   }
 
-  .badge-accent {
-    @apply bg-pink-100 text-accent-600;
+  .badge-condition {
+    @apply bg-poka-cyan-500/10 text-poka-cyan-700;
   }
 
-  /* Link */
+  /* ----- CATEGORY BUTTONS ----- */
+  .category-btn {
+    @apply w-full text-left px-4 py-3.5 rounded-xl 
+           font-medium text-poka-gray-600
+           transition-all duration-200 ease-out
+           hover:bg-poka-gray-100;
+  }
+
+  .category-btn.active {
+    @apply bg-gradient-to-r from-poka-cyan-500 to-poka-cyan-700 
+           text-white shadow-cyan;
+  }
+
+  /* ----- AVATAR ----- */
+  .avatar {
+    @apply w-10 h-10 rounded-full flex items-center justify-center 
+           font-bold text-white
+           bg-gradient-to-br from-poka-cyan-500 to-poka-cyan-700;
+  }
+
+  /* ----- PRICE ----- */
+  .price {
+    @apply text-poka-yellow-700 font-extrabold;
+  }
+
+  /* ----- HERO ----- */
+  .hero-gradient {
+    @apply bg-gradient-to-br from-poka-cyan-500 via-poka-cyan-600 to-poka-cyan-700;
+  }
+
+  /* ----- VIEW TOGGLE ----- */
+  .view-toggle-btn {
+    @apply p-2.5 rounded-lg transition-all duration-200;
+  }
+
+  .view-toggle-btn.active {
+    @apply bg-poka-cyan-500 text-white shadow-md;
+  }
+
+  .view-toggle-btn:not(.active) {
+    @apply text-poka-gray-400 hover:text-poka-gray-600;
+  }
+
+  /* ----- LINKS ----- */
   .link {
-    @apply text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200;
+    @apply text-poka-cyan-600 hover:text-poka-cyan-700 font-medium transition-colors duration-200;
   }
 }
 
-/* Custom scrollbar */
+/* ===== UTILITY CLASSES ===== */
+@layer utilities {
+  .duration-400 {
+    transition-duration: 400ms;
+  }
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-poka-gray-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary-300 rounded-full;
+  @apply bg-poka-cyan-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary-400;
+  @apply bg-poka-cyan-400;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* ===== LOGO STYLES ===== */
+.logo-container {
+  @apply w-12 h-12 rounded-2xl overflow-hidden shadow-lg
+         bg-gradient-to-br from-poka-yellow-500 to-poka-yellow-700
+         flex items-center justify-center;
+}
+
+.logo-magenta {
+  @apply w-3 h-6 rounded-full bg-poka-magenta-500;
+}
+
+.logo-cyan {
+  @apply w-5 h-5 rounded-full bg-poka-cyan-500 -ml-1.5;
 }
