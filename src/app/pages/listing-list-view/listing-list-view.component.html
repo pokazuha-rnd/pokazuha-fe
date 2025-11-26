@@ -23,9 +23,9 @@
       <!-- Image -->
       <div class="relative h-48 overflow-hidden bg-gray-100">
         <img
-          [src]="postad.images && postad.images.length > 0
-                ? getImageUrl(postad.images[0].imageUrl)
-                : 'assets/no-image.jpg'"
+          [src]="postad.primaryImageUrl
+      ? getImageUrl(postad.primaryImageUrl)
+      : 'assets/no-image.jpg'"
           [alt]="postad.title"
           class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
 
