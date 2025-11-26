@@ -72,6 +72,7 @@ export interface PostadListDto {
   isFeatured: boolean;
   createdAt: string;
   images: PostadImageDto[];
+  primaryImageUrl: string;
 }
 
 @Injectable({
@@ -169,6 +170,6 @@ export class PostadService {
    */
   getImageUrl(imageUrl: string): string {
     // imageUrl format: "89976abc-40f0-46d1-96cb-4fb0ce84fe0b/ee6e968b-f22a-4a98-88c7-76a8705086c3_Test-Image.jpg"
-    return `${environment.apiUrl}/api/Postads/images/${imageUrl}`;
+    return `${environment.apiUrl}/uploads/${imageUrl}`;
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { User } from '../../../models/auth.models';
 import { Subscription } from 'rxjs';
@@ -8,7 +9,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userName = '';
   mobileMenuOpen = false;
+  searchQuery = '';
   private userSubscription?: Subscription;
 
   constructor(
@@ -28,7 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isAuthenticated = user !== null;
 
       if (user) {
-        // Combine firstName and lastName
         this.userName = `${user.firstName} ${user.lastName}`.trim() || user.email;
       } else {
         this.userName = '';
@@ -42,6 +43,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  search(): void {
+    if (this.searchQuery.trim()) {
+      this.router.navigate(['/'], { 
+        queryParams: { search: this.searchQuery.trim() } 
+      });
+      this.mobileMenuOpen = false;
+    }
+  }
+
+  onSearchKeyup(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.search();
+    }
   }
 
   logout(): void {
