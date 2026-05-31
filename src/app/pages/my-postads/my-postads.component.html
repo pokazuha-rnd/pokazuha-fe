@@ -1,0 +1,213 @@
+<div class="min-h-screen bg-poka-gray-50">
+  <!-- Header Section -->
+  <section class="hero-gradient relative overflow-hidden py-12">
+    <div class="max-w-7xl mx-auto px-6 relative">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
+            My Postads
+          </h1>
+          <p class="text-lg text-white/80 font-medium">
+            Manage your listings
+          </p>
+        </div>
+        <a routerLink="/post" class="btn-primary flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Post New Ad
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    
+    <!-- Stats Bar -->
+    <div class="bg-white rounded-2xl shadow-card p-6 mb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-poka-gray-500 mb-1">Total Ads</p>
+          <p class="text-2xl font-bold text-poka-gray-800">{{ totalCount }}</p>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-poka-cyan-500/10 flex items-center justify-center">
+          <svg class="w-6 h-6 text-poka-cyan-500" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-20">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-poka-cyan-500 border-t-transparent"></div>
+      <p class="mt-4 text-poka-gray-500">Loading your postads...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage && !isLoading" class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+      <svg class="w-12 h-12 text-red-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p class="text-red-800 font-semibold mb-2">{{ errorMessage }}</p>
+      <button (click)="loadMyPostads()" class="btn-secondary mt-3">Try Again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !errorMessage && postads.length === 0" class="text-center py-20">
+      <div class="w-24 h-24 bg-poka-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-poka-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-poka-gray-800 mb-2">No ads yet</h3>
+      <p class="text-poka-gray-500 mb-6">Start selling by posting your first ad</p>
+      <a routerLink="/post" class="btn-primary inline-flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Post Your First Ad
+      </a>
+    </div>
+
+    <!-- Postads Grid -->
+    <div *ngIf="!isLoading && !errorMessage && postads.length > 0">
+      <div class="grid grid-cols-1 gap-6">
+        <div *ngFor="let postad of postads" 
+             class="bg-white rounded-2xl shadow-card hover:shadow-card-hover transition-all duration-300 overflow-hidden">
+          <div class="flex flex-col md:flex-row">
+            
+            <!-- Image Section -->
+            <div class="md:w-64 h-48 md:h-auto flex-shrink-0 bg-poka-gray-100 relative">
+              <img 
+                *ngIf="postad.primaryImageUrl" 
+                [src]="getImageUrl(postad.primaryImageUrl)" 
+                [alt]="postad.title"
+                class="w-full h-full object-cover">
+              <div *ngIf="!postad.primaryImageUrl" class="w-full h-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-poka-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              
+              <!-- Status Badge -->
+              <div class="absolute top-3 left-3">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="getStatusClass(postad.status)">
+                  {{ postad.status }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="flex-1 p-6">
+              <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-poka-gray-800 mb-2 hover:text-poka-cyan-500 transition-colors">
+                    <a [routerLink]="['/listing', postad.id]">{{ postad.title }}</a>
+                  </h3>
+                  <p class="text-sm text-poka-gray-500 line-clamp-2 mb-3">
+                    {{ postad.description }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Details Grid -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <p class="text-xs text-poka-gray-500 mb-1">Price</p>
+                  <p class="font-bold text-poka-cyan-500">{{ postad.price }} {{ postad.currency }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-poka-gray-500 mb-1">Category</p>
+                  <p class="font-semibold text-poka-gray-700">{{ postad.category }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-poka-gray-500 mb-1">Location</p>
+                  <p class="font-semibold text-poka-gray-700">{{ postad.location }}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-poka-gray-500 mb-1">Views</p>
+                  <p class="font-semibold text-poka-gray-700">{{ postad.viewCount }}</p>
+                </div>
+              </div>
+
+              <!-- Footer with Actions -->
+              <div class="flex items-center justify-between pt-4 border-t border-poka-gray-100">
+                <p class="text-xs text-poka-gray-400">
+                  Posted: {{ postad.createdAt | date:'medium' }}
+                </p>
+                
+                <div class="flex gap-2">
+                  <a [routerLink]="['/listing', postad.id]" 
+                     class="btn-secondary-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    View
+                  </a>
+                  
+                  <button (click)="onEdit(postad.id)" 
+                          class="btn-secondary-sm"
+                          [disabled]="postad.status === 'Expired'">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Edit
+                  </button>
+                  
+                  <button (click)="onDelete(postad.id)" 
+                          class="btn-danger-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="mt-10 flex justify-center">
+        <nav class="flex items-center gap-2">
+          <!-- Previous Button -->
+          <button 
+            (click)="onPageChange(currentPage - 1)"
+            [disabled]="!hasPreviousPage"
+            class="pagination-btn"
+            [class.disabled]="!hasPreviousPage">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+
+          <!-- Page Numbers -->
+          <button 
+            *ngFor="let page of getPaginationPages()"
+            (click)="onPageChange(page)"
+            class="pagination-btn"
+            [class.active]="currentPage === page">
+            {{ page }}
+          </button>
+
+          <!-- Next Button -->
+          <button 
+            (click)="onPageChange(currentPage + 1)"
+            [disabled]="!hasNextPage"
+            class="pagination-btn"
+            [class.disabled]="!hasNextPage">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+  </main>
+</div>

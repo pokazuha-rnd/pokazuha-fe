@@ -1,0 +1,54 @@
+.install-banner {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: #1A1A1A;
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease-out;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.btn-install {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #00BCD4, #0097A7);
+  color: white;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-install:hover {
+  opacity: 0.9;
+}
+
+.btn-dismiss {
+  flex-shrink: 0;
+  color: #9E9E9E;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.btn-dismiss:hover {
+  color: white;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}

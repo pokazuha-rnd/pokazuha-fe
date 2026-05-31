@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ListingListViewComponent } from '../listing-list-view/listing-list-view.component';
+import { AuthService } from '../../core/services/auth.service';
+import { LocationService, Location } from '../../services/location.service';
 
 @Component({
   selector: 'app-home',
@@ -35,15 +37,40 @@ export class HomeComponent implements OnInit {
     { name: 'Other', value: 'Other' },
   ];
 
-  constructor(private route: ActivatedRoute) {}
+  // Dynamic locations from backend
+  locations: Location[] = [];
+  isLoadingLocations = true;
+
+  constructor(
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private locationService: LocationService
+  ) {}
 
   ngOnInit(): void {
+    // Load locations from backend
+    this.loadLocations();
+
     // Subscribe to query params to handle search from header
     this.route.queryParams.subscribe(params => {
       if (params['search']) {
         this.searchTerm = params['search'];
         // Wait for view to be ready, then search
         setTimeout(() => this.onSearch(), 100);
+      }
+    });
+  }
+
+  loadLocations(): void {
+    this.locationService.getLocations().subscribe({
+      next: (locations) => {
+        this.locations = locations;
+        this.isLoadingLocations = false;
+      },
+      error: (error) => {
+        console.error('Error loading locations:', error);
+        this.isLoadingLocations = false;
+        // Fallback to empty array
       }
     });
   }

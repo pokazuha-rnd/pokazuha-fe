@@ -47,28 +47,89 @@
             Post Your Ad
           </a>
 
+          <!-- My Postads Button - Only show if authenticated -->
+          <a *ngIf="authService.isAuthenticated()" 
+             routerLink="/my-postads" 
+             class="btn-primary w-full text-center mt-3 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            My Postads
+          </a>
+
           <!-- Location -->
-          <div class="mt-6 pt-6 border-t border-poka-gray-100">
-            <div class="flex items-center gap-2 mb-3">
-              <div class="w-6 h-6 rounded-full bg-poka-yellow-500 flex items-center justify-center">
-                <svg class="w-3.5 h-3.5 text-poka-dark" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                </svg>
-              </div>
-              <span class="font-semibold text-poka-gray-700">Location</span>
-            </div>
-            <select 
-              [(ngModel)]="selectedLocation"
-              (change)="onLocationChange()"
-              class="input py-3">
-              <option value="">All Romania</option>
-              <option value="Bucharest">Bucharest</option>
-              <option value="Cluj-Napoca">Cluj-Napoca</option>
-              <option value="Timisoara">Timisoara</option>
-              <option value="Iasi">Iasi</option>
-              <option value="Constanta">Constanta</option>
-            </select>
-          </div>
+<div class="mt-6 pt-6 border-t border-poka-gray-100">
+  <div class="flex items-center gap-2 mb-3">
+    <div class="w-6 h-6 rounded-full bg-poka-yellow-500 flex items-center justify-center">
+      <svg class="w-3.5 h-3.5 text-poka-dark" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+      </svg>
+    </div>
+    <span class="font-semibold text-poka-gray-700">Location</span>
+  </div>
+  
+  <!-- Loading state -->
+  <div *ngIf="isLoadingLocations" class="input py-3 text-poka-gray-400 text-center bg-white">
+    <div class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-poka-cyan-500 border-t-transparent mr-2"></div>
+    Loading...
+  </div>
+  
+    <!-- Location Dropdown with Icon -->
+    <div *ngIf="!isLoadingLocations" class="relative">
+      <!-- Icon inside select -->
+      <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg class="w-5 h-5 text-poka-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      
+      <select 
+        [(ngModel)]="selectedLocation"
+        (change)="onLocationChange()"
+        class="w-full pl-11 pr-10 py-3.5
+              bg-gradient-to-br from-white to-poka-gray-50
+              border-2 border-poka-gray-200 
+              rounded-xl
+              text-poka-gray-700 font-medium text-sm
+              shadow-sm
+              focus:outline-none focus:border-poka-cyan-500 focus:ring-2 focus:ring-poka-cyan-500/20
+              hover:border-poka-cyan-300 hover:shadow-md
+              transition-all duration-200
+              cursor-pointer
+              appearance-none">
+        <option value="" class="text-poka-gray-500">🇺🇸 All USA</option>
+        <option *ngFor="let location of locations" 
+                [value]="location.value"
+                class="py-2">
+          {{ location.displayName }}
+        </option>
+      </select>
+      
+      <!-- Custom Dropdown Arrow -->
+      <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg class="w-5 h-5 text-poka-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- Clear Filter Button (when location is selected) -->
+    <button 
+      *ngIf="selectedLocation"
+      (click)="selectedLocation = ''; onLocationChange()"
+      class="mt-3 w-full px-4 py-2 
+            bg-poka-yellow-500/10 hover:bg-poka-yellow-500/20
+            border border-poka-yellow-500/30 hover:border-poka-yellow-500
+            rounded-lg
+            text-sm font-semibold text-poka-yellow-700
+            transition-all duration-200
+            flex items-center justify-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+      Clear Location
+    </button>
+  </div>
         </div>
       </aside>
 

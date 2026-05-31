@@ -75,6 +75,20 @@ export interface PostadListDto {
   primaryImageUrl: string;
 }
 
+export interface UpdatePostadRequest {
+  title: string;
+  description: string;
+  price: number;
+  currency: string;
+  category: string;
+  condition: string;
+  location: string;
+  phoneNumber: string;
+  showEmailToPublic: boolean;
+  newImages?: File[];
+  imageIdsToDelete?: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -172,4 +186,41 @@ export class PostadService {
     // imageUrl format: "89976abc-40f0-46d1-96cb-4fb0ce84fe0b/ee6e968b-f22a-4a98-88c7-76a8705086c3_Test-Image.jpg"
     return `${environment.apiUrl}/uploads/${imageUrl}`;
   }
+
+  /**
+ * Update existing postad
+ */
+updatePostad(id: string, request: UpdatePostadRequest): Observable<PostadDto> {
+  const formData = new FormData();
+  
+  // Append the ID
+  formData.append('Id', id);
+  
+  // Append all form fields
+  formData.append('Title', request.title);
+  formData.append('Description', request.description);
+  formData.append('Price', request.price.toString());
+  formData.append('Currency', request.currency);
+  formData.append('Category', request.category);
+  formData.append('Condition', request.condition);
+  formData.append('Location', request.location);
+  formData.append('PhoneNumber', request.phoneNumber);
+  formData.append('ShowEmailToPublic', request.showEmailToPublic.toString());
+  
+  // Append NEW images if provided
+  if (request.newImages && request.newImages.length > 0) {
+    request.newImages.forEach((image) => {
+      formData.append('NewImages', image, image.name);
+    });
+  }
+
+  // Append image IDs to delete if provided
+  if (request.imageIdsToDelete && request.imageIdsToDelete.length > 0) {
+    request.imageIdsToDelete.forEach((imageId) => {
+      formData.append('ImageIdsToDelete', imageId);
+    });
+  }
+
+  return this.http.put<PostadDto>(`${this.apiUrl}/${id}`, formData);
+}
 }

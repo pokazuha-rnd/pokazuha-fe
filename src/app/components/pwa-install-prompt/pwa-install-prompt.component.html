@@ -1,0 +1,19 @@
+<div *ngIf="visible" class="install-banner">
+  <img src="assets/icons/icon-192x192.png" alt="Pokazuha" class="w-10 h-10 rounded-xl flex-shrink-0">
+
+  <div class="flex-1 min-w-0">
+    <p class="font-semibold text-white text-sm leading-tight">Install Pokazuha</p>
+    <p class="text-poka-gray-400 text-xs mt-0.5">Quick access, no browser needed</p>
+  </div>
+
+  <button (click)="install()" class="btn-install">
+    Install
+  </button>
+
+  <button (click)="dismiss()" class="btn-dismiss" aria-label="Close">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </svg>
+  </button>
+</div>
